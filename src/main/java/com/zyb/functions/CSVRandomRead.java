@@ -33,7 +33,7 @@ public class CSVRandomRead extends AbstractFunction {
 
     static {
         desc.add("请填写csv格式的文件路径"); //$NON-NLS-1$
-        desc.add("请输入行的值，第一行是0，第二行是1...,不填写则返回随机列");
+        desc.add("请输入行的值，第一行是0，第二行是1...,不填写则返回随机行");
         desc.add("请输入列的值，第一列是0，第二列是1...");
     }
 
@@ -42,8 +42,8 @@ public class CSVRandomRead extends AbstractFunction {
         String myValue = ""; //$NON-NLS-1$
 
         String fileName = ((org.apache.jmeter.engine.util.CompoundVariable) values[0]).execute();
-        String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
-        String targerRow = ((org.apache.jmeter.engine.util.CompoundVariable) values[2]).execute();
+        String targerRow = ((org.apache.jmeter.engine.util.CompoundVariable) values[1]).execute();
+        String columnOrNext = ((org.apache.jmeter.engine.util.CompoundVariable) values[2]).execute();
 
 //        String fileName = "C:\\Users\\jueying\\Desktop\\testCSVRead.csv";
 //        String targerRow = null;
@@ -76,17 +76,17 @@ public class CSVRandomRead extends AbstractFunction {
             return ""; //$NON-NLS-1$
         }
 
-        //若列不是整数或者未填写的话，随机返回一列
+        //若列不是整数或者未填写的话，随机返回一行
         if(null == targerRow || !isInteger(targerRow) || targerRow.isEmpty()){
             targerRow = String.valueOf(randValueFromFile(fileName));
         }
 
         try {
-            int columnIndex = Integer.parseInt(columnOrNext); // what column
             int rowIndex = Integer.parseInt(targerRow);
+            int columnIndex = Integer.parseInt(columnOrNext); // what column
             // is wanted?
             myValue = FileWrapper.getColumn(fileName, rowIndex,columnIndex);
-            System.out.println(myValue);
+//            System.out.println(myValue);
         } catch (NumberFormatException e) {
             log.warn("{} - can't parse column number: {} {}",
                     Thread.currentThread().getName(), columnOrNext,
